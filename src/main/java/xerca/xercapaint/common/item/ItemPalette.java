@@ -1,6 +1,6 @@
 package xerca.xercapaint.common.item;
 
-import javax.annotation.Nullable;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,9 +18,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import xerca.xercapaint.common.XercaPaint;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions")
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ItemPalette extends Item {
     ItemPalette(String name) {
         this.setRegistryName(name);
@@ -33,6 +38,28 @@ public class ItemPalette extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         XercaPaint.proxy.showCanvasGui(playerIn);
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
+    }
+
+    public static boolean isFull(ItemStack stack) {
+        return basicColorCount(stack) == 16;
+    }
+
+    public static int basicColorCount(ItemStack stack) {
+        if (stack.getItem() != Items.ITEM_PALETTE) {
+            return 0;
+        }
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey("basic")) {
+            byte[] basicColors = tag.getByteArray("basic");
+            if (basicColors.length == 16) {
+                int basicCount = 0;
+                for (byte basicColor : basicColors) {
+                    basicCount += basicColor;
+                }
+                return basicCount;
+            }
+        }
+        return 0;
     }
 
     /**
