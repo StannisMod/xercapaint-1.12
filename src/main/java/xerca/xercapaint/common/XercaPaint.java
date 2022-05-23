@@ -36,6 +36,8 @@ public class XercaPaint {
         network.registerMessage(CanvasUpdatePacketHandler.class, CanvasUpdatePacket.class, msg_id++, Side.SERVER);
         network.registerMessage(PaletteUpdatePacketHandler.class, PaletteUpdatePacket.class, msg_id++, Side.SERVER);
         network.registerMessage(ExportPaintingPacketHandler.class, ExportPaintingPacket.class, msg_id++, Side.CLIENT);
+        network.registerMessage(ImportPaintingPacketHandler.class, ImportPaintingPacket.class, msg_id++, Side.CLIENT);
+        network.registerMessage(ImportPaintingSendPacketHandler.class, ImportPaintingSendPacket.class, msg_id++, Side.SERVER);
         proxy.preInit();
     }
 
