@@ -5,6 +5,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PaletteUtil {
     public static class Color {
+
+        public static Color WHITE = new Color(0xFFFFFFFF);
+
         public int r, g, b;
 
         public Color(int r, int g, int b) {
@@ -17,6 +20,29 @@ public class PaletteUtil {
             this.r = (rgb >> 16) & 0xFF;
             this.g = (rgb >> 8) & 0xFF;
             this.b = rgb & 0xFF;
+        }
+
+        static public Color mix(Color a, Color b, float ratio){
+            if(ratio == 1.f) {
+                return a;
+            }
+            else if(ratio == 0.f){
+                return b;
+            }
+            Color res = new Color(
+                    (int)(a.r*ratio) + (int)(b.r*(1-ratio)),
+                    (int)(a.g*ratio) + (int)(b.g*(1-ratio)),
+                    (int)(a.b*ratio) + (int)(b.b*(1-ratio))
+            );
+            int averageMaximum = (int)(Math.max(Math.max(a.r, a.g), a.b)*ratio) + (int)(Math.max(Math.max(b.r, b.g), b.b)*(1-ratio));
+
+            int maximumOfAverage = Math.max(Math.max(res.r, res.g), res.b);
+            int gainFactor = averageMaximum / maximumOfAverage;
+
+            res.r *= gainFactor;
+            res.g *= gainFactor;
+            res.b *= gainFactor;
+            return res;
         }
 
         public int rgbVal() {
@@ -64,8 +90,8 @@ public class PaletteUtil {
             calculateResult();
         }
 
-        public void calculateResult(){
-            if(numberOfColors == 0){
+        public void calculateResult() {
+            if (numberOfColors == 0) {
                 this.result = emptinessColor;//new GuiCanvasEdit.Color(200, 200, 200);
                 return;
             }
@@ -84,7 +110,7 @@ public class PaletteUtil {
             this.result = new Color(resultRed, resultGreen, resultBlue);
         }
 
-        public void mix(Color toBeMixed){
+        public void mix(Color toBeMixed) {
             totalRed += toBeMixed.r;
             totalGreen += toBeMixed.g;
             totalBlue += toBeMixed.b;
@@ -93,7 +119,7 @@ public class PaletteUtil {
             calculateResult();
         }
 
-        public void reset(){
+        public void reset() {
             totalRed = 0;
             totalGreen = 0;
             totalBlue = 0;
@@ -110,7 +136,7 @@ public class PaletteUtil {
             return numberOfColors;
         }
 
-        public void writeToBuffer(ByteBuf buf){
+        public void writeToBuffer(ByteBuf buf) {
             buf.writeInt(totalRed);
             buf.writeInt(totalGreen);
             buf.writeInt(totalBlue);
@@ -118,7 +144,7 @@ public class PaletteUtil {
             buf.writeInt(numberOfColors);
         }
 
-        public void readFromBuffer(ByteBuf buf){
+        public void readFromBuffer(ByteBuf buf) {
             totalRed = buf.readInt();
             totalGreen = buf.readInt();
             totalBlue = buf.readInt();
@@ -127,14 +153,14 @@ public class PaletteUtil {
         }
     }
 
-    public static void writeCustomColorArrayToNBT(NBTTagCompound tag, CustomColor[] customColors){
+    public static void writeCustomColorArrayToNBT(NBTTagCompound tag, CustomColor[] customColors) {
         int[] totalReds = new int[12];
         int[] totalGreens = new int[12];
         int[] totalBlues = new int[12];
         int[] totalMaximums = new int[12];
         int[] numbersOfColors = new int[12];
 
-        for(int i=0; i<customColors.length; i++){
+        for (int i = 0; i < customColors.length; i++) {
             totalReds[i] = customColors[i].totalRed;
             totalGreens[i] = customColors[i].totalGreen;
             totalBlues[i] = customColors[i].totalBlue;
@@ -148,14 +174,14 @@ public class PaletteUtil {
         tag.setIntArray("n", numbersOfColors);
     }
 
-    public static void readCustomColorArrayFromNBT(NBTTagCompound tag, CustomColor[] customColors){
+    public static void readCustomColorArrayFromNBT(NBTTagCompound tag, CustomColor[] customColors) {
         int[] totalReds = tag.getIntArray("r");
         int[] totalGreens = tag.getIntArray("g");
         int[] totalBlues = tag.getIntArray("b");
         int[] totalMaximums = tag.getIntArray("m");
         int[] numbersOfColors = tag.getIntArray("n");
 
-        for(int i=0; i<customColors.length; i++){
+        for (int i = 0; i < customColors.length; i++) {
             customColors[i] = new CustomColor(totalReds[i], totalGreens[i], totalBlues[i], totalMaximums[i], numbersOfColors[i]);
         }
     }

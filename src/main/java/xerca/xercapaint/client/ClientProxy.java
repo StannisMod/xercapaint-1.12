@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import xerca.xercapaint.common.Proxy;
 import xerca.xercapaint.common.XercaPaint;
 import xerca.xercapaint.common.entity.EntityCanvas;
+import xerca.xercapaint.common.entity.EntityEasel;
 import xerca.xercapaint.common.item.ItemCanvas;
 import xerca.xercapaint.common.item.ItemPalette;
 import xerca.xercapaint.common.item.Items;
@@ -25,30 +26,29 @@ public class ClientProxy extends Proxy {
         canvasRenderer.updateMapTexture(data);
     }
 
-    public void showCanvasGui(EntityPlayer player){
+    public void showCanvasGui(EntityPlayer player) {
         final ItemStack heldItem = player.getHeldItemMainhand();
         final ItemStack offhandItem = player.getHeldItemOffhand();
 
         Minecraft minecraft = Minecraft.getMinecraft();
 
-        if(heldItem.isEmpty() || !minecraft.player.getGameProfile().getId().equals(player.getGameProfile().getId())){
+        if (heldItem.isEmpty() || !minecraft.player.getGameProfile().getId().equals(player.getGameProfile().getId())) {
             return;
         }
 
-        if(heldItem.getItem() instanceof ItemCanvas){
-            if(offhandItem.isEmpty()){
-                minecraft.displayGuiScreen(new GuiCanvasView(heldItem.getTagCompound(), new TextComponentTranslation("item.item_canvas.name"), ((ItemCanvas)heldItem.getItem()).getCanvasType()));
-            }else if(offhandItem.getItem() instanceof ItemPalette){
+        if (heldItem.getItem() instanceof ItemCanvas) {
+            if (offhandItem.isEmpty()) {
+                minecraft.displayGuiScreen(new GuiCanvasView(heldItem.getTagCompound(), new TextComponentTranslation("item.item_canvas.name"), ((ItemCanvas) heldItem.getItem()).getCanvasType()));
+            } else if (offhandItem.getItem() instanceof ItemPalette) {
                 minecraft.displayGuiScreen(new GuiCanvasEdit(minecraft.player,
-                        heldItem.getTagCompound(), offhandItem.getTagCompound(), new TextComponentTranslation("item.item_canvas.name"), ((ItemCanvas)heldItem.getItem()).getCanvasType()));
+                        heldItem.getTagCompound(), offhandItem.getTagCompound(), new TextComponentTranslation("item.item_canvas.name"), ((ItemCanvas) heldItem.getItem()).getCanvasType()));
             }
-        }
-        else if(heldItem.getItem() instanceof ItemPalette){
-            if(offhandItem.isEmpty()){
+        } else if (heldItem.getItem() instanceof ItemPalette) {
+            if (offhandItem.isEmpty()) {
                 minecraft.displayGuiScreen(new GuiPalette(heldItem.getTagCompound(), new TextComponentTranslation("item.item_palette.name")));
-            }else if(offhandItem.getItem() instanceof ItemCanvas){
+            } else if (offhandItem.getItem() instanceof ItemCanvas) {
                 minecraft.displayGuiScreen(new GuiCanvasEdit(minecraft.player,
-                        offhandItem.getTagCompound(), heldItem.getTagCompound(), new TextComponentTranslation("item.item_canvas.name"), ((ItemCanvas)offhandItem.getItem()).getCanvasType()));
+                        offhandItem.getTagCompound(), heldItem.getTagCompound(), new TextComponentTranslation("item.item_canvas.name"), ((ItemCanvas) offhandItem.getItem()).getCanvasType()));
             }
         }
     }
@@ -56,6 +56,7 @@ public class ClientProxy extends Proxy {
     @Override
     public void preInit() {
         RenderingRegistry.registerEntityRenderingHandler(EntityCanvas.class, new RenderEntityCanvas.RenderEntityCanvasFactory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityEasel.class, RenderEntityEasel::new);
     }
 
     @Override
@@ -68,12 +69,12 @@ public class ClientProxy extends Proxy {
 
     }
 
-    @Mod.EventBusSubscriber(modid = XercaPaint.MODID, value=Side.CLIENT)
+    @Mod.EventBusSubscriber(modid = XercaPaint.MODID, value = Side.CLIENT)
     static class ForgeBusSubscriber {
         @SubscribeEvent
         public static void renderItemInFrameEvent(RenderItemInFrameEvent ev) {
-            if(ev.getItem().getItem() == Items.ITEM_CANVAS){
-                if(canvasRenderer == null){
+            if (ev.getItem().getItem() == Items.ITEM_CANVAS) {
+                if (canvasRenderer == null) {
                     // Can't put this in setup handler because it needs to be in the main thread
                     canvasRenderer = new CanvasRenderer(Minecraft.getMinecraft().getTextureManager());
                 }

@@ -19,6 +19,7 @@ public class Entities {
 
     public static void init() {
         registerEntity(EntityCanvas.class, "canvas", 10, 2147483647, false);
+        registerEntity(EntityEasel.class, "easel", 10, 2147483647, false);
     }
 
 }

@@ -1,25 +1,18 @@
 package xerca.xercapaint.common.item;
 
-import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemHangingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import xerca.xercapaint.common.CanvasType;
 import xerca.xercapaint.common.XercaPaint;
 import xerca.xercapaint.common.entity.EntityCanvas;
 
-import javax.annotation.Nullable;
-
 public class ItemCanvas extends ItemHangingEntity {
+
     private CanvasType canvasType;
 
     ItemCanvas(String name, CanvasType canvasType) {
@@ -29,6 +22,11 @@ public class ItemCanvas extends ItemHangingEntity {
         this.setCreativeTab(Items.paintTab);
         this.setMaxStackSize(1);
         this.canvasType = canvasType;
+
+        this.addPropertyOverride(new ResourceLocation(XercaPaint.MODID, "drawn" ), (itemStack, p_call_2_, p_call_3_) -> {
+            if (!itemStack.hasTagCompound()) return 0.0f;
+            else return 1.0F;
+        });
     }
 
     @Override

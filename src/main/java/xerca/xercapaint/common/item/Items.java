@@ -19,6 +19,7 @@ public final class Items {
     public static final ItemCanvas ITEM_CANVAS_LARGE = null;
     public static final ItemCanvas ITEM_CANVAS_LONG = null;
     public static final ItemCanvas ITEM_CANVAS_TALL = null;
+    public static final ItemEasel ITEM_EASEL = null;
 
     public static PaintCreativeTab paintTab;
 
@@ -28,6 +29,7 @@ public final class Items {
         initModel(ITEM_CANVAS_LARGE, "item_canvas_large");
         initModel(ITEM_CANVAS_LONG, "item_canvas_long");
         initModel(ITEM_CANVAS_TALL, "item_canvas_tall");
+        initModel(ITEM_EASEL, "item_easel");
     }
 
     private static void initModel(Item item, String location) {
@@ -50,7 +52,8 @@ public final class Items {
                     new ItemCanvas("item_canvas", CanvasType.SMALL),
                     new ItemCanvas("item_canvas_large", CanvasType.LARGE),
                     new ItemCanvas("item_canvas_long", CanvasType.LONG),
-                    new ItemCanvas("item_canvas_tall", CanvasType.TALL)
+                    new ItemCanvas("item_canvas_tall", CanvasType.TALL),
+                    new ItemEasel("item_easel")
             );
         }
 

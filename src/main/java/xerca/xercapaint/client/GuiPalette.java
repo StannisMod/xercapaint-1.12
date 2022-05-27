@@ -21,6 +21,13 @@ public class GuiPalette extends BasePalette {
 
     @Override
     public void initGui() {
+        paletteX = paletteXs[paletteXs.length - 1];
+        paletteY = paletteYs[paletteYs.length - 1];
+        if (paletteX == -1000 || paletteY == -1000) {
+            paletteX = 140;
+            paletteY = 40;
+        }
+        updatePalettePos(0, 0);
     }
 
     @Override
@@ -30,14 +37,14 @@ public class GuiPalette extends BasePalette {
         renderCursor(mouseX, mouseY);
     }
 
-    private void renderCursor(int mouseX, int mouseY){
-        if(isCarryingColor){
+    private void renderCursor(int mouseX, int mouseY) {
+        if (isCarryingColor) {
             setGLColor(carriedColor);
-            drawTexturedModalRect(mouseX-brushSpriteSize/2, mouseY-brushSpriteSize/2, brushSpriteX+brushSpriteSize, brushSpriteY, dropSpriteWidth, brushSpriteSize);
+            drawTexturedModalRect(mouseX - brushSpriteSize / 2, mouseY - brushSpriteSize / 2, brushSpriteX + brushSpriteSize, brushSpriteY, dropSpriteWidth, brushSpriteSize);
 
-        }else if(isCarryingWater){
+        } else if (isCarryingWater) {
             setGLColor(waterColor);
-            drawTexturedModalRect(mouseX-brushSpriteSize/2, mouseY-brushSpriteSize/2, brushSpriteX+brushSpriteSize, brushSpriteY, dropSpriteWidth, brushSpriteSize);
+            drawTexturedModalRect(mouseX - brushSpriteSize / 2, mouseY - brushSpriteSize / 2, brushSpriteX + brushSpriteSize, brushSpriteY, dropSpriteWidth, brushSpriteSize);
         }
     }
 
@@ -47,5 +54,13 @@ public class GuiPalette extends BasePalette {
             PaletteUpdatePacket pack = new PaletteUpdatePacket(customColors);
             XercaPaint.network.sendToServer(pack);
         }
+    }
+
+    private void updatePalettePos(double deltaX, double deltaY) {
+        paletteX += deltaX;
+        paletteY += deltaY;
+
+        paletteXs[paletteXs.length - 1] = paletteX;
+        paletteYs[paletteYs.length - 1] = paletteY;
     }
 }
