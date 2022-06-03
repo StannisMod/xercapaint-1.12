@@ -34,8 +34,8 @@ public abstract class BasePalette extends GuiScreen {
     final static int paletteHeight = 193;
     static final int colorPickerSpriteX = 25;
     static final int colorPickerSpriteY = 242;
-    static final int colorPickerPosX = 98;
-    static final int colorPickerPosY = 62;
+    int colorPickerPosX = -100;
+    int colorPickerPosY = -100;
     static final int colorPickerSize = 14;
 
     static final double[] paletteXs = {-1000, -1000, -1000, -1000, -1000};
@@ -203,9 +203,20 @@ public abstract class BasePalette extends GuiScreen {
         int mouseX = Math.round(posX);
         int mouseY = Math.round(posY);
 
+        int x = mouseX - (int) paletteX;
+        int y = mouseY - (int) paletteY;
+
+        if (!isCarryingWater && !isCarryingColor) {
+            if (inColorPicker(x, y)) {
+                if (mouseButton == 0) {
+                    setPickingColor();
+                    playSound(SoundEvents.COLOR_PICKER);
+                    super.mouseClicked(posX, posY, mouseButton);
+                }
+            }
+        }
+
         if (paletteClick(mouseX, mouseY)) {
-            int x = mouseX - (int) paletteX;
-            int y = mouseY - (int) paletteY;
             Vec2f clickVec = new Vec2f(x, y);
             float sqrBasicRadius = basicColorRadius * basicColorRadius;
             float sqrCustomRadius = customColorRadius * customColorRadius;
@@ -245,16 +256,6 @@ public abstract class BasePalette extends GuiScreen {
                     if (mouseButton == 0) {
                         setCarryingWater();
                         playSound(SoundEvents.WATER);
-                        didSomething = true;
-                    }
-                }
-            }
-
-            if (!didSomething && paletteComplete && !isCarryingWater && !isCarryingColor) {
-                if (inColorPicker(x, y)) {
-                    if (mouseButton == 0) {
-                        setPickingColor();
-                        playSound(SoundEvents.COLOR_PICKER);
                         didSomething = true;
                     }
                 }

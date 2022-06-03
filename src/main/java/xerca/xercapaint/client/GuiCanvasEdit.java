@@ -465,7 +465,9 @@ public class GuiCanvasEdit extends BasePalette {
                 if (x >= 0 && y >= 0 && x < canvasPixelWidth && y < canvasPixelHeight) {
                     int color = getPixelAt(x, y);
                     carriedColor = new PaletteUtil.Color(color);
+                    currentColor = new PaletteUtil.Color(color);
                     setCarryingColor();
+
                     playSound(SoundEvents.COLOR_PICKER_SUCK);
                 }
             } else {
@@ -565,6 +567,9 @@ public class GuiCanvasEdit extends BasePalette {
 
         brushMeterX = (int) canvasX + canvasWidth + 2;
         brushMeterY = (int) canvasY + canvasHeight / 2 + 30;
+
+        colorPickerPosX = brushMeterX - (int) paletteX;
+        colorPickerPosY = brushMeterY - (int) paletteY - 18;
 
         brushOpacityMeterX = (int) canvasX + canvasWidth + 2;
         brushOpacityMeterY = (int) canvasY;
