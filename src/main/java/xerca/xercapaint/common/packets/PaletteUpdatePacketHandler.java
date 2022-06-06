@@ -8,11 +8,15 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import xerca.xercapaint.common.PaletteUtil;
 import xerca.xercapaint.common.item.Items;
 
 
 public class PaletteUpdatePacketHandler implements IMessageHandler<PaletteUpdatePacket, IMessage> {
+
+    @SideOnly(Side.CLIENT)
     @Override
     public IMessage onMessage(PaletteUpdatePacket message, MessageContext ctx) {
 

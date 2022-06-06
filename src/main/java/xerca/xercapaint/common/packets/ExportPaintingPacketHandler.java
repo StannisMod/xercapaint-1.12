@@ -7,10 +7,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import xerca.xercapaint.common.command.CommandExport;
 
 public class ExportPaintingPacketHandler implements IMessageHandler<ExportPaintingPacket, IMessage> {
 
+    @SideOnly(Side.CLIENT)
     @Override
     public IMessage onMessage(final ExportPaintingPacket msg, final MessageContext ctx) {
         Minecraft.getMinecraft().addScheduledTask(() -> {
