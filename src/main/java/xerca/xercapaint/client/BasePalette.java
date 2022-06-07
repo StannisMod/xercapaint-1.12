@@ -213,11 +213,8 @@ public abstract class BasePalette extends GuiScreen {
         int mouseX = Math.round(posX);
         int mouseY = Math.round(posY);
 
-        int x = mouseX - (int) paletteX;
-        int y = mouseY - (int) paletteY;
-
         if (!isCarryingWater && !isCarryingColor) {
-            if (inColorPicker(x, y)) {
+            if (inColorPicker(mouseX, mouseY)) {
                 if (mouseButton == 0) {
                     setPickingColor();
                     playSound(SoundEvents.COLOR_PICKER);
@@ -225,6 +222,9 @@ public abstract class BasePalette extends GuiScreen {
                 }
             }
         }
+
+        int x = mouseX - (int) paletteX;
+        int y = mouseY - (int) paletteY;
 
         if (paletteClick(mouseX, mouseY)) {
             Vec2f clickVec = new Vec2f(x, y);
