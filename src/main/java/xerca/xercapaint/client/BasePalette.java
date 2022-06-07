@@ -43,6 +43,8 @@ public abstract class BasePalette extends GuiScreen {
 
     double paletteX;
     double paletteY;
+    double prevPaletteX;
+    double prevPaletteY;
     final static PaletteUtil.Color waterColor = new PaletteUtil.Color(53, 118, 191);
     final static PaletteUtil.Color emptinessColor = new PaletteUtil.Color(255, 236, 229);
 
@@ -171,11 +173,12 @@ public abstract class BasePalette extends GuiScreen {
         }
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        drawTexturedModalRect((float) paletteX, (float) paletteY, 0, 0, paletteWidth, paletteHeight);
+        f = this.mc.getRenderPartialTicks();
+        drawTexturedModalRect((float) (prevPaletteX + (paletteX - prevPaletteX) * f), (float) (prevPaletteY + (paletteY - prevPaletteY) * f), 0, 0, paletteWidth, paletteHeight);
 
         // Draw color picker
         if (paletteComplete) {
-            drawTexturedModalRect((int) paletteX + colorPickerPosX, (int) paletteY + colorPickerPosY, colorPickerSpriteX, colorPickerSpriteY, colorPickerSize, colorPickerSize);
+            drawTexturedModalRect((int) colorPickerPosX, (int) colorPickerPosY, colorPickerSpriteX, colorPickerSpriteY, colorPickerSize, colorPickerSize);
         }
     }
 

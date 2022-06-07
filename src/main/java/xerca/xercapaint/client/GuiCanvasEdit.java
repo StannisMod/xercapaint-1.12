@@ -422,8 +422,8 @@ public class GuiCanvasEdit extends BasePalette {
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         int scroll = Mouse.getEventDWheel();
-        int mouseX = Mouse.getEventX();
-        int mouseY = Mouse.getEventY();
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         if (scroll != 0) {
             if (!gettingSigned) {
                 if (inBrushOpacityMeter(mouseX, mouseY)) {
@@ -568,8 +568,8 @@ public class GuiCanvasEdit extends BasePalette {
         brushMeterX = (int) canvasX + canvasWidth + 2;
         brushMeterY = (int) canvasY + canvasHeight / 2 + 30;
 
-        colorPickerPosX = brushMeterX - (int) paletteX;
-        colorPickerPosY = brushMeterY - (int) paletteY - 18;
+        colorPickerPosX = brushMeterX;
+        colorPickerPosY = brushMeterY - 18;
 
         brushOpacityMeterX = (int) canvasX + canvasWidth + 2;
         brushOpacityMeterY = (int) canvasY;
@@ -579,6 +579,8 @@ public class GuiCanvasEdit extends BasePalette {
     }
 
     private void updatePalettePos(double deltaX, double deltaY) {
+        prevPaletteX = paletteX;
+        prevPaletteY = paletteY;
         paletteX += deltaX;
         paletteY += deltaY;
 
