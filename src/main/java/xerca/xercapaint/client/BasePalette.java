@@ -146,6 +146,8 @@ public abstract class BasePalette extends GuiScreen {
         }
     }
 
+    private float lastSeenPartialTicks = 0.0F;
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float f) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(noteGuiTextures);
@@ -174,7 +176,12 @@ public abstract class BasePalette extends GuiScreen {
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         f = this.mc.getRenderPartialTicks();
+        if (f < lastSeenPartialTicks) {
+            prevPaletteX = paletteX;
+            prevPaletteY = paletteY;
+        }
         drawTexturedModalRect((float) (prevPaletteX + (paletteX - prevPaletteX) * f), (float) (prevPaletteY + (paletteY - prevPaletteY) * f), 0, 0, paletteWidth, paletteHeight);
+        lastSeenPartialTicks = f;
 
         // Draw color picker
         if (paletteComplete) {
